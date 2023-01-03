@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "larionov_lab_1_structurs", "larionov_lab_1_structurs\larionov_lab_1_structurs.csproj", "{67A26C49-F5F5-4A9A-B236-58A2FE9A2BF2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67A26C49-F5F5-4A9A-B236-58A2FE9A2BF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67A26C49-F5F5-4A9A-B236-58A2FE9A2BF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67A26C49-F5F5-4A9A-B236-58A2FE9A2BF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67A26C49-F5F5-4A9A-B236-58A2FE9A2BF2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BACF6FA1-1133-4718-A6FF-4F43A4B5CD43}
+	EndGlobalSection
+EndGlobal
