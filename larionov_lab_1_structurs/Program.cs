@@ -122,8 +122,10 @@
     {
         int DEFAULT_COUNT_STRUCT = 10;
         int MAX_COUNT_STRUCT = 100;
-        string READ_INIT_DATA_FROM_FILE = "data.txt";
+        string READ_INIT_DATA_FROM_FILE = "workers_data.txt";
 
+        int EXPERIENCE_DEFAULT = 15;
+        int EXPERIENCE_MAX = 50;
         private struct WORKER
         {
             public string surnameInitials;
@@ -145,6 +147,18 @@
 
             foreach (var item in workers)
                 Console.WriteLine("{0,30}|   {1,30}|   {2,30}", item.surnameInitials, item.position, item.yearEmployment);
+        }
+
+        private List<WORKER> getWorkersExperienceMoreThan(List<WORKER> workers, int experience)
+        {
+            List<WORKER> array = new List<WORKER>();
+            int currentYear = DateTime.Now.Year;
+
+            foreach (var item in workers)
+                if (currentYear - item.yearEmployment > experience)
+                    array.Add(item);
+
+            return array;
         }
 
         private string inputSurnameInitials()
@@ -231,7 +245,7 @@
             MyQuestion myQuestion = new MyQuestion();
             bool isFromKeyboard = myQuestion.isQuestion(myQuestion.INPUT_FROM_KEYBOARD);
 
-            List<WORKER> array = null;
+            List<WORKER> array;
 
             if (isFromKeyboard)
                 array = createArrayFromKeyboard();
@@ -251,6 +265,19 @@
             Console.WriteLine("Исходные данные: ");
             printWorkers(array);
 
+            MyInput myInput = new MyInput();
+            int experience = myInput.inputCount($"Сколько лет стажа? (Для {EXPERIENCE_DEFAULT} нажмите ENTER)\0: ", EXPERIENCE_MAX, EXPERIENCE_DEFAULT);
+
+            array = getWorkersExperienceMoreThan(array, experience);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Фамилии работников, чей стаж работы в организации превышает {experience} лет: ");
+
+            if (array.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Такие сотрудники не найдены!");
+            }
         }
     }
 
