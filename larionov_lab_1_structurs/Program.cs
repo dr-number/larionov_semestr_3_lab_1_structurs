@@ -188,7 +188,7 @@
 
                 while (!file.EndOfStream)
                 {
-                    ++countStrings;
+                    ++countStrings; 
                     try
                     {
                         var (surnameInitials, position, yearEmployment) = file.ReadLine().Split(", ") switch { var a => (a[0], a[1], a[2]) };
