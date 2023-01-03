@@ -335,6 +335,8 @@
         int MIN_YEAR = 1;
         int MAX_YEAR = 9999;
 
+        string FORMAT_DATE_PRINT = "dd.MM.yyyy";
+
         private struct ZNAK
         {
             public string surnameName;
@@ -360,13 +362,24 @@
             Console.WriteLine("{0,30}|   {1,30}|   {2,30}", "Фамилия мия", "Дата рождения", "Знак зодиака");
 
             foreach (var item in signs)
-                Console.WriteLine("{0,30}|   {1,30}|   {2,30}", item.surnameName, item.birthday, item.zodiacSign);
+                Console.WriteLine(
+                    "{0,30}|   {1,30}|   {2,30}", 
+                    item.surnameName,
+                    new DateTime(item.birthday[2], item.birthday[1], item.birthday[0]).ToString(FORMAT_DATE_PRINT), 
+                    item.zodiacSign
+               );
         }
 
         private void printMiniInfo(List<ZNAK> signs)
         {
             foreach (var item in signs)
-                Console.WriteLine("{0,30}|   {1,30}", item.surnameName, item.birthday);
+            {
+                Console.WriteLine(
+                    "{0,30}|   {1,30}", 
+                    item.surnameName,
+                    new DateTime(item.birthday[2], item.birthday[1], item.birthday[0]).ToString(FORMAT_DATE_PRINT)
+                );
+            }
         }
 
         private List<ZNAK> getPeopleWithSign(List<ZNAK> peoples, string sign)
