@@ -401,7 +401,37 @@
                 return "Козерог";
 
             if ((day >= 21 && month == 1) || (day <= 19 && month == 2))
-                return "";
+                return "Водолей";
+
+            if ((day >= 20 && month == 2) || (day <= 20 && month == 3))
+                return "Рыбы";
+
+            if ((day >= 21 && month == 3) || (day <= 20 && month == 4))
+                return "Овен";
+
+            if ((day >= 21 && month == 4) || (day <= 20 && month == 5))
+                return "Телец";
+
+            if ((day >= 21 && month == 5) || (day <= 21 && month == 6))
+                return "Близнецы";
+
+            if ((day >= 22 && month == 6) || (day <= 22 && month == 7))
+                return "Рак";
+
+            if ((day >= 23 && month == 7) || (day <= 23 && month == 8))
+                return "Лев";
+
+            if ((day >= 24 && month == 8) || (day <= 23 && month == 9))
+                return "Дева";
+
+            if ((day >= 24 && month == 9) || (day <= 23 && month == 10))
+                return "Весы";
+
+            if ((day >= 24 && month == 10) || (day <= 22 && month == 11))
+                return "Скорпион";
+
+            if ((day >= 23 && month == 11) || (day <= 21 && month == 12))
+                return "Стрелец";
 
             return "Знак зодиака не определен";
         }
