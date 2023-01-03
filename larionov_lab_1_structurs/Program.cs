@@ -152,7 +152,7 @@
         private void printSurname(List<WORKER> workers)
         {
             foreach (var item in workers)
-                Console.WriteLine(item.surnameInitials.Split(", ")[0]);
+                Console.WriteLine(item.surnameInitials.Split(" ")[0]);
         }
 
         private List<WORKER> getWorkersExperienceMoreThan(List<WORKER> workers, int experience)
@@ -309,6 +309,7 @@
 
             while (isGo)  
             {
+                Console.ResetColor();
                 Console.WriteLine("\nВведите номер задачи: ");
                 Console.WriteLine("\n1) " + TasksInfo.TASK_6);
                 Console.WriteLine("\n2) " + TasksInfo.TASK_16);
