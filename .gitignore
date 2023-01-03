@@ -361,7 +361,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-[Dd]ebug/net6.0/*.json
-[Dd]ebug/net6.0/*.dll
-[Dd]ebug/net6.0/*.exe
-[Dd]ebug/net6.0/*.pdb
+**/[Dd]ebug/**/*.json
+**/[Dd]ebug/**/*.dll
+**/[Dd]ebug/**/*.exe
+**/[Dd]ebug/**/*.pdb
