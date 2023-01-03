@@ -149,6 +149,12 @@
                 Console.WriteLine("{0,30}|   {1,30}|   {2,30}", item.surnameInitials, item.position, item.yearEmployment);
         }
 
+        private void printSurname(List<WORKER> workers)
+        {
+            foreach (var item in workers)
+                Console.WriteLine(item.surnameInitials.Split(", ")[0]);
+        }
+
         private List<WORKER> getWorkersExperienceMoreThan(List<WORKER> workers, int experience)
         {
             List<WORKER> array = new List<WORKER>();
@@ -278,6 +284,8 @@
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Такие сотрудники не найдены!");
             }
+
+            printSurname(workerSort(array));
         }
     }
 
