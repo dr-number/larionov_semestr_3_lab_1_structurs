@@ -342,12 +342,17 @@
             public int[] birthday;
         };
 
+        private long dateToMillisecond(int[] birthday)
+        {
+            return ((DateTimeOffset)new DateTime(birthday[2], birthday[1], birthday[0])).ToUnixTimeMilliseconds();
+        }
+
         private List<ZNAK> signSort(List<ZNAK> signs)
         {
             if (signs == null)
                 return null;
 
-            return signs.OrderBy(item => item.surnameInitials).ToList();
+            return signs.OrderBy(item => dateToMillisecond(item.birthday)).ToList();
         }
 
         private void printSigns(List<ZNAK> signs)
@@ -392,11 +397,8 @@
             return new int[] { day, month, year };
         }
 
-        private string getZodiacSign(int[] birthday)
+        private string getZodiacSign(int day, int month)
         {
-            int day = birthday[0];
-            int month = birthday[1];
-
             if ((day >= 22 && month == 12) || (day <= 20 && month == 1))
                 return "Козерог";
 
@@ -438,34 +440,32 @@
 
         private ZNAK inputPeople(int current, int max)
         {
-            MyInput myInput = new MyInput();
             ZNAK znak = new ZNAK();
-
             Console.ResetColor();
             Console.WriteLine($"\nВведите данные сотрудника {current} из {max}: ");
 
             int[] birthday = inputBirthday();
             znak.surnameName = inputSurnameName();
             znak.birthday = birthday;
-            znak.zodiacSign = myInput.inputInt("Введите год поступления на работу: ");
+            znak.zodiacSign = getZodiacSign(birthday[0], birthday[1]);
 
             return znak;
         }
 
-        private List<WORKER> createArrayFromKeyboard()
+        private List<ZNAK> createArrayFromKeyboard()
         {
             MyInput myInput = new MyInput();
-            List<WORKER> array = new List<WORKER>();
+            List<ZNAK> array = new List<ZNAK>();
 
-            int countValues = myInput.inputCount($"\nСколько нужно структур? (Для {DEFAULT_COUNT_STRUCT} нажмите ENTER): \0", MAX_COUNT_STRUCT, DEFAULT_COUNT_STRUCT);
+            int countValues = myInput.inputCount($"\nСколько нужно людей? (Для {DEFAULT_COUNT_STRUCT} нажмите ENTER): \0", MAX_COUNT_STRUCT, DEFAULT_COUNT_STRUCT);
 
             for (int i = 0; i < countValues; i++)
-                array.Add(inputWorker(i + 1, countValues));
+                array.Add(inputPeople(i + 1, countValues));
 
             return array;
         }
 
-        private List<WORKER> readFile(string kFileName)
+        private List<ZNAK> readFile(string kFileName)
         {
             if (!File.Exists(kFileName))
             {
@@ -474,7 +474,7 @@
                 return null;
             }
 
-            List<WORKER> result = new List<WORKER>();
+            List<ZNAK> result = new List<ZNAK>();
 
             try
             {
