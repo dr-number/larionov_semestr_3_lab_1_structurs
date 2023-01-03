@@ -180,27 +180,19 @@
 
             try
             {
-                string aStr = "";
                 WORKER worker;
-
-                int countStrings = 0, countProcessingStrings = 0;
                 StreamReader file = new StreamReader(kFileName);
 
                 while (!file.EndOfStream)
                 {
-                    ++countStrings; 
                     try
                     {
                         var (surnameInitials, position, yearEmployment) = file.ReadLine().Split(", ") switch { var a => (a[0], a[1], a[2]) };
-
                         worker = new WORKER();
                         worker.surnameInitials = surnameInitials;
                         worker.position = position;
                         worker.yearEmployment = int.Parse(yearEmployment);
-
                         result.Add(worker);
-                        ++countProcessingStrings;
-                     
                     }
                     catch (Exception ignore){}
 
