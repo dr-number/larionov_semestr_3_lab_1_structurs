@@ -275,9 +275,7 @@
             int experience = myInput.inputCount($"\nСколько лет стажа? (Для {EXPERIENCE_DEFAULT} нажмите ENTER)\0: ", EXPERIENCE_MAX, EXPERIENCE_DEFAULT);
 
             array = getWorkersExperienceMoreThan(array, experience);
-
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Фамилии работников, чей стаж работы в организации превышает {experience} лет: ");
 
             if (array.Count == 0)
             {
@@ -285,10 +283,8 @@
                 Console.WriteLine("Такие сотрудники не найдены!");
             }
 
+            Console.WriteLine($"Фамилии работников ({array.Count} чел.), чей стаж работы в организации превышает {experience} лет: ");
             printSurname(workerSort(array));
-            Console.ResetColor();
-            Console.WriteLine($"{array.Count} чел.");
-
         }
     }
 
@@ -343,6 +339,10 @@
                         break;
 
                 }
+
+                Console.ResetColor();
+                Console.WriteLine("\nДля продолжения нажмите любую клавишу...");
+                Console.ReadLine();
             }
 
         }
