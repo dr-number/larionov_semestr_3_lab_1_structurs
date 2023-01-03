@@ -175,13 +175,13 @@
             return surname + " " + initials;
         }
 
-        private WORKER inputWorker()
+        private WORKER inputWorker(int current, int max)
         {
             MyInput myInput = new MyInput();
             WORKER worker = new WORKER();
 
             Console.ResetColor();
-            Console.WriteLine("Введите данные сотрудника: ");
+            Console.WriteLine($"Введите данные сотрудника {current} из {max}: ");
 
             worker.surnameInitials = inputSurnameInitials();
             worker.position = myInput.inputText("Введите название занимаемой должности: ");
@@ -198,7 +198,7 @@
             int countValues = myInput.inputCount($"\nСколько нужно структур? (Для {DEFAULT_COUNT_STRUCT} нажмите ENTER): \0", MAX_COUNT_STRUCT, DEFAULT_COUNT_STRUCT);
 
             for (int i = 0; i < countValues; i++)
-                array.Add(inputWorker());
+                array.Add(inputWorker(i + 1, countValues));
             
             return array;
         }
