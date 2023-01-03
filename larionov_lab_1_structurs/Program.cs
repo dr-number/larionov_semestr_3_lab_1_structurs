@@ -139,6 +139,14 @@
             return workers.OrderBy(item => item.surnameInitials).ToList();
         }
 
+        private void printWorkers(List<WORKER> workers)
+        {
+            Console.WriteLine("{0,30}|   {1,30}|   {2,30}", "Фамилия и инициалы", "Должность", "Год поступления на работу");
+
+            foreach (var item in workers)
+                Console.WriteLine("{0,30}|   {1,30}|   {2,30}", item.surnameInitials, item.position, item.yearEmployment);
+        }
+
         private string inputSurnameInitials()
         {
             MyInput myInput = new MyInput();
@@ -230,7 +238,19 @@
             else
                 array = readFile(READ_INIT_DATA_FROM_FILE);
 
+            if (array == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Нет исходных данных!");
+                return;
+            }
+
             array = workerSort(array);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Исходные данные: ");
+            printWorkers(array);
+
         }
     }
 
