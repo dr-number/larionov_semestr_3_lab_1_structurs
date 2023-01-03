@@ -181,7 +181,7 @@
             WORKER worker = new WORKER();
 
             Console.ResetColor();
-            Console.WriteLine($"Введите данные сотрудника {current} из {max}: ");
+            Console.WriteLine($"\nВведите данные сотрудника {current} из {max}: ");
 
             worker.surnameInitials = inputSurnameInitials();
             worker.position = myInput.inputText("Введите название занимаемой должности: ");
