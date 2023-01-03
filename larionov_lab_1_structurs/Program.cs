@@ -272,7 +272,7 @@
             printWorkers(array);
 
             MyInput myInput = new MyInput();
-            int experience = myInput.inputCount($"Сколько лет стажа? (Для {EXPERIENCE_DEFAULT} нажмите ENTER)\0: ", EXPERIENCE_MAX, EXPERIENCE_DEFAULT);
+            int experience = myInput.inputCount($"\nСколько лет стажа? (Для {EXPERIENCE_DEFAULT} нажмите ENTER)\0: ", EXPERIENCE_MAX, EXPERIENCE_DEFAULT);
 
             array = getWorkersExperienceMoreThan(array, experience);
 
@@ -286,6 +286,9 @@
             }
 
             printSurname(workerSort(array));
+            Console.ResetColor();
+            Console.WriteLine($"{array.Count} чел.");
+
         }
     }
 
