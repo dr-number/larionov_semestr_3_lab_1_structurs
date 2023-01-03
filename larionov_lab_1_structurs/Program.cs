@@ -298,4 +298,50 @@
             public int[] birthday;
         };
     }
+
+    class Class1
+    {
+        static void Main(string[] args)
+        {
+
+            Console.WriteLine("Варинат №6. Ларионов Никита Юрьевич. гр. 210з\n");
+            bool isGo = true;
+
+            while (isGo)  
+            {
+                Console.WriteLine("\nВведите номер задачи: ");
+                Console.WriteLine("\n1) " + TasksInfo.TASK_6);
+                Console.WriteLine("\n2) " + TasksInfo.TASK_16);
+
+                Console.WriteLine("\nДля выхода введите \"0\": ");
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        Task1 task1 = new Task1();
+                        task1.init();
+                        break;
+
+                    /*
+                    case "2":
+                        Task2 task2 = new Task2();
+                        task2.init();
+                        break;
+                    */
+
+                    case "0":
+                        isGo = false;
+                        break;
+
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nНекорректные данные!");
+                        Console.ResetColor();
+                        break;
+
+                }
+            }
+
+        }
+    }
+
 }
