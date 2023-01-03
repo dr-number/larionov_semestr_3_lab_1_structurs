@@ -372,9 +372,10 @@
         private List<ZNAK> getPeopleWithSign(List<ZNAK> peoples, string sign)
         {
             List<ZNAK> array = new List<ZNAK>();
+            sign = sign.ToLower();
 
             foreach (var item in peoples)
-                if (item.zodiacSign == sign)
+                if (item.zodiacSign.ToLower() == sign)
                     array.Add(item);
 
             return array;
@@ -478,19 +479,25 @@
 
             try
             {
-                WORKER worker;
+                ZNAK people;
                 StreamReader file = new StreamReader(kFileName);
 
                 while (!file.EndOfStream)
                 {
                     try
                     {
-                        var (surnameInitials, position, yearEmployment) = file.ReadLine().Split(", ") switch { var a => (a[0], a[1], a[2]) };
-                        worker = new WORKER();
-                        worker.surnameInitials = surnameInitials;
-                        worker.position = position;
-                        worker.yearEmployment = int.Parse(yearEmployment);
-                        result.Add(worker);
+                        var (surnameName, birthday) = file.ReadLine().Split(", ") switch { var a => (a[0], a[1]) };
+                        string[] birthdayStr = birthday.Split(".");
+                        int[] birthdayArray = new int[] {
+                            int.Parse(birthdayStr[0]),
+                            int.Parse(birthdayStr[1]),
+                            int.Parse(birthdayStr[2])
+                        };
+                        people = new ZNAK();
+                        people.surnameName = surnameName;
+                        people.birthday = birthdayArray;
+                        people.zodiacSign = getZodiacSign(birthdayArray[0], birthdayArray[1]);
+                        result.Add(people);
                     }
                     catch (Exception ignore) { }
 
@@ -513,7 +520,7 @@
             MyQuestion myQuestion = new MyQuestion();
             bool isFromKeyboard = myQuestion.isQuestion(myQuestion.INPUT_FROM_KEYBOARD);
 
-            List<WORKER> array;
+            List<ZNAK> array;
 
             if (isFromKeyboard)
                 array = createArrayFromKeyboard();
@@ -527,26 +534,26 @@
                 return;
             }
 
-            array = workerSort(array);
+            array = signSort(array);
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Исходные данные: ");
-            printWorkers(array);
+            printSigns(array);
 
             MyInput myInput = new MyInput();
-            int experience = myInput.inputCount($"\nСколько лет стажа? (Для {EXPERIENCE_DEFAULT} нажмите ENTER)\0: ", EXPERIENCE_MAX, EXPERIENCE_DEFAULT);
+            string signZodiak = myInput.inputText($"\nВведите знак зодиака\0: ");
 
-            array = getWorkersExperienceMoreThan(array, experience);
+            array = getPeopleWithSign(array, signZodiak);
             Console.ForegroundColor = ConsoleColor.Green;
 
             if (array.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Такие сотрудники не найдены!");
+                Console.WriteLine($"Люди со знаком зодиака \"{signZodiak}\" не найдены!");
             }
 
-            Console.WriteLine($"Фамилии работников ({array.Count} чел.), чей стаж работы в организации превышает {experience} лет: ");
-            printSurname(workerSort(array));
+            Console.WriteLine($"Люди ({array.Count} чел.) со знаком зодиака {signZodiak}: ");
+            printMiniInfo(signSort(array));
         }
     }
 
@@ -555,7 +562,7 @@
         static void Main(string[] args)
         {
 
-            Console.WriteLine("Варинат №6. Ларионов Никита Юрьевич. гр. 210з\n");
+            Console.WriteLine("Варинат №6-16. Ларионов Никита Юрьевич. гр. 210з\n");
             bool isGo = true;
 
             while (isGo)  
@@ -573,12 +580,10 @@
                         task1.init();
                         break;
 
-                    /*
                     case "2":
                         Task2 task2 = new Task2();
                         task2.init();
                         break;
-                    */
 
                     case "0":
                         isGo = false;
