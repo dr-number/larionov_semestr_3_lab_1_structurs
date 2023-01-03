@@ -122,6 +122,7 @@
     {
         int DEFAULT_COUNT_STRUCT = 10;
         int MAX_COUNT_STRUCT = 100;
+        string READ_INIT_DATA_FROM_FILE = "data.txt";
 
         private struct WORKER
         {
@@ -153,21 +154,66 @@
             return worker;
         }
 
-        private WORKER[] createArrayFromKeyboard()
+        private List<WORKER> createArrayFromKeyboard()
         {
             MyInput myInput = new MyInput();
+            List<WORKER> array = new List<WORKER>();
+
             int countValues = myInput.inputCount($"\nСколько нужно структур? (Для {DEFAULT_COUNT_STRUCT} нажмите ENTER): \0", MAX_COUNT_STRUCT, DEFAULT_COUNT_STRUCT);
 
-            Console.WriteLine(" ");
-            WORKER[] array = new WORKER[countValues];
-
             for (int i = 0; i < countValues; i++)
-            {
-                array[i] = inputWorker();
-                Console.WriteLine(" ");
-            }
+                array.Add(inputWorker());
             
             return array;
+        }
+
+        private List<WORKER> readFile(string kFileName)
+        {
+            if (!File.Exists(kFileName))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Файл {kFileName} не существует!");
+                return null;
+            }
+
+            List<WORKER> result = new List<WORKER>();
+
+            try
+            {
+                string aStr = "";
+                WORKER worker;
+
+                int countStrings = 0, countProcessingStrings = 0;
+                StreamReader file = new StreamReader(kFileName);
+
+                while (!file.EndOfStream)
+                {
+                    ++countStrings;
+                    try
+                    {
+                        var (surnameInitials, position, yearEmployment) = file.ReadLine().Split(", ") switch { var a => (a[0], a[1], a[2]) };
+
+                        worker = new WORKER();
+                        worker.surnameInitials = surnameInitials;
+                        worker.position = position;
+                        worker.yearEmployment = int.Parse(yearEmployment);
+
+                        result.Add(worker);
+                        ++countProcessingStrings;
+                     
+                    }
+                    catch (Exception ignore){}
+
+                }
+                file.Close();
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Ошибка: {e.Message}");
+            }
+
+            return result;
         }
 
         public void init()
@@ -177,14 +223,12 @@
             MyQuestion myQuestion = new MyQuestion();
             bool isFromKeyboard = myQuestion.isQuestion(myQuestion.INPUT_FROM_KEYBOARD);
 
-            WORKER[] array = null;
+            List<WORKER> array = null;
 
             if (isFromKeyboard)
                 array = createArrayFromKeyboard();
             else
-            {
-
-            }
+                array = readFile(READ_INIT_DATA_FROM_FILE);
         }
     }
 
