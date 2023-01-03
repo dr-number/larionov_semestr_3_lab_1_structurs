@@ -131,6 +131,14 @@
             public int yearEmployment;
         };
 
+        private List<WORKER> workerSort(List<WORKER> workers)
+        {
+            if (workers == null)
+                return null;
+
+            return workers.OrderBy(item => item.surnameInitials).ToList();
+        }
+
         private string inputSurnameInitials()
         {
             MyInput myInput = new MyInput();
@@ -221,6 +229,8 @@
                 array = createArrayFromKeyboard();
             else
                 array = readFile(READ_INIT_DATA_FROM_FILE);
+
+            array = workerSort(array);
         }
     }
 
