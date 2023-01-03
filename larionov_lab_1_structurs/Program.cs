@@ -105,6 +105,38 @@
 
             return x;
         }
+
+        public int inputInterval(string text, int minValue, int maxValue)
+        {
+
+            string xStr = "";
+            bool isNumber = false;
+            int x = 0;
+
+            while (true)
+            {
+                Console.ResetColor();
+                Console.WriteLine(text);
+
+                xStr = Console.ReadLine();
+                isNumber = int.TryParse(xStr, out x);
+
+                if (!isNumber)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{xStr} - не число\n");
+                }
+                else if (x <= minValue || x > maxValue)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Введите число в промежутке от {minValue} до {maxValue} включительно!\n");
+                }
+                else
+                    break;
+            }
+
+            return x;
+        }
     }
 
     class MyQuestion
@@ -290,12 +322,202 @@
 
     class Task2
     {
+        int DEFAULT_COUNT_STRUCT = 8;
+        int MAX_COUNT_STRUCT = 100;
+        string READ_INIT_DATA_FROM_FILE = "zodiak_data.txt";
+
+        int MIN_MONTH = 1;
+        int MAX_MONTH = 12;
+
+        int MIN_DAY = 1;
+        int MAX_DAY = 31;
+
+        int MIN_YEAR = 1;
+        int MAX_YEAR = 9999;
+
         private struct ZNAK
         {
-            public string surname_name;
-            public string zodiac_sign;
+            public string surnameName;
+            public string zodiacSign;
             public int[] birthday;
         };
+
+        private List<ZNAK> signSort(List<ZNAK> signs)
+        {
+            if (signs == null)
+                return null;
+
+            return signs.OrderBy(item => item.surnameInitials).ToList();
+        }
+
+        private void printSigns(List<ZNAK> signs)
+        {
+            Console.WriteLine("{0,30}|   {1,30}|   {2,30}", "Фамилия мия", "Дата рождения", "Знак зодиака");
+
+            foreach (var item in signs)
+                Console.WriteLine("{0,30}|   {1,30}|   {2,30}", item.surnameName, item.birthday, item.zodiacSign);
+        }
+
+        private void printMiniInfo(List<ZNAK> signs)
+        {
+            foreach (var item in signs)
+                Console.WriteLine("{0,30}|   {1,30}", item.surnameName, item.birthday);
+        }
+
+        private List<ZNAK> getPeopleWithSign(List<ZNAK> peoples, string sign)
+        {
+            List<ZNAK> array = new List<ZNAK>();
+
+            foreach (var item in peoples)
+                if (item.zodiacSign == sign)
+                    array.Add(item);
+
+            return array;
+        }
+
+        private string inputSurnameName()
+        {
+            MyInput myInput = new MyInput();
+            string surname = myInput.inputText("Введите фамилию: ");
+            string name = myInput.inputText("Введите имя: ");
+            return surname + " " + name;
+        }
+
+        private int[] inputBirthday()
+        {
+            MyInput myInput = new MyInput();
+            int day = myInput.inputInterval("Введите день: ", MIN_DAY, MAX_DAY);
+            int month = myInput.inputInterval("Введите месяц: ", MIN_MONTH, MAX_MONTH);
+            int year = myInput.inputInterval("Введите месяц: ", MIN_YEAR, MAX_YEAR);
+            return new int[] { day, month, year };
+        }
+
+        private string getZodiacSign(int[] birthday)
+        {
+            int day = birthday[0];
+            int month = birthday[1];
+
+            if ((day >= 22 && month == 12) || (day <= 20 && month == 1))
+                return "Козерог";
+
+            if ((day >= 21 && month == 1) || (day <= 19 && month == 2))
+                return "";
+
+            return "Знак зодиака не определен";
+        }
+
+        private ZNAK inputPeople(int current, int max)
+        {
+            MyInput myInput = new MyInput();
+            ZNAK znak = new ZNAK();
+
+            Console.ResetColor();
+            Console.WriteLine($"\nВведите данные сотрудника {current} из {max}: ");
+
+            int[] birthday = inputBirthday();
+            znak.surnameName = inputSurnameName();
+            znak.birthday = birthday;
+            znak.zodiacSign = myInput.inputInt("Введите год поступления на работу: ");
+
+            return znak;
+        }
+
+        private List<WORKER> createArrayFromKeyboard()
+        {
+            MyInput myInput = new MyInput();
+            List<WORKER> array = new List<WORKER>();
+
+            int countValues = myInput.inputCount($"\nСколько нужно структур? (Для {DEFAULT_COUNT_STRUCT} нажмите ENTER): \0", MAX_COUNT_STRUCT, DEFAULT_COUNT_STRUCT);
+
+            for (int i = 0; i < countValues; i++)
+                array.Add(inputWorker(i + 1, countValues));
+
+            return array;
+        }
+
+        private List<WORKER> readFile(string kFileName)
+        {
+            if (!File.Exists(kFileName))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Файл {kFileName} не существует!");
+                return null;
+            }
+
+            List<WORKER> result = new List<WORKER>();
+
+            try
+            {
+                WORKER worker;
+                StreamReader file = new StreamReader(kFileName);
+
+                while (!file.EndOfStream)
+                {
+                    try
+                    {
+                        var (surnameInitials, position, yearEmployment) = file.ReadLine().Split(", ") switch { var a => (a[0], a[1], a[2]) };
+                        worker = new WORKER();
+                        worker.surnameInitials = surnameInitials;
+                        worker.position = position;
+                        worker.yearEmployment = int.Parse(yearEmployment);
+                        result.Add(worker);
+                    }
+                    catch (Exception ignore) { }
+
+                }
+                file.Close();
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Ошибка: {e.Message}");
+            }
+
+            return result;
+        }
+
+        public void init()
+        {
+            Console.WriteLine(TasksInfo.TASK_6);
+
+            MyQuestion myQuestion = new MyQuestion();
+            bool isFromKeyboard = myQuestion.isQuestion(myQuestion.INPUT_FROM_KEYBOARD);
+
+            List<WORKER> array;
+
+            if (isFromKeyboard)
+                array = createArrayFromKeyboard();
+            else
+                array = readFile(READ_INIT_DATA_FROM_FILE);
+
+            if (array == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Нет исходных данных!");
+                return;
+            }
+
+            array = workerSort(array);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Исходные данные: ");
+            printWorkers(array);
+
+            MyInput myInput = new MyInput();
+            int experience = myInput.inputCount($"\nСколько лет стажа? (Для {EXPERIENCE_DEFAULT} нажмите ENTER)\0: ", EXPERIENCE_MAX, EXPERIENCE_DEFAULT);
+
+            array = getWorkersExperienceMoreThan(array, experience);
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            if (array.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Такие сотрудники не найдены!");
+            }
+
+            Console.WriteLine($"Фамилии работников ({array.Count} чел.), чей стаж работы в организации превышает {experience} лет: ");
+            printSurname(workerSort(array));
+        }
     }
 
     class Class1
