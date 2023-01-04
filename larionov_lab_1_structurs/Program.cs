@@ -396,7 +396,7 @@
                 Console.ForegroundColor = ConsoleColor.Green;
             }
 
-            List<string> resultData = workersToString(array);
+            List<string> resultData = getSurnames(array);
             Console.WriteLine(title);
             printStrings(resultData);
 
