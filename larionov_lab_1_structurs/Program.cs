@@ -362,8 +362,8 @@
             int experience = myInput.inputCount($"\nСколько лет стажа? (Для {EXPERIENCE_DEFAULT} нажмите ENTER)\0: ", EXPERIENCE_MAX, EXPERIENCE_DEFAULT);
 
             array = workerSort(getWorkersExperienceMoreThan(array, experience));
-            Console.ForegroundColor = ConsoleColor.Green;
 
+            Console.ResetColor();
             bool isSaveToFile = myQuestion.isQuestion(myQuestion.WRITE_TO_FILE);
             bool isEmptyResult = array.Count == 0;
             string title = "";
@@ -377,7 +377,9 @@
             {
                 if (isEmptyResult)
                     Console.ForegroundColor = ConsoleColor.Red;
-                   
+                else
+                    Console.ForegroundColor = ConsoleColor.Green;
+
                 Console.WriteLine(title);
                 printSurname(array);
             }
@@ -651,8 +653,8 @@
             string signZodiak = myInput.inputText($"\nВведите знак зодиака\0: ");
 
             array = signSort(getPeopleWithSign(array, signZodiak));
-            Console.ForegroundColor = ConsoleColor.Green;
 
+            Console.ResetColor();
             bool isSaveToFile = myQuestion.isQuestion(myQuestion.WRITE_TO_FILE);
             bool isEmptyResult = array.Count == 0;
             string title = "";
@@ -666,6 +668,8 @@
             {
                 if(isEmptyResult)
                     Console.ForegroundColor = ConsoleColor.Red;
+                else
+                    Console.ForegroundColor = ConsoleColor.Green;
 
                 Console.WriteLine(title);
                 printMiniInfo(array);
