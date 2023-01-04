@@ -181,6 +181,14 @@
                 catch (Exception ignore) {}
             }
 
+            if (result)
+                Console.WriteLine($"Данные успешно сохранены в файл: {fileName}!");
+            else
+            {
+               Console.ForegroundColor = ConsoleColor.Red;
+               Console.WriteLine($"Ошибка при сохранении данных в файл: {fileName}!");
+            }
+
             return result;
         }
     }
@@ -227,10 +235,19 @@
             return result;
         }
 
-        private void printSurname(List<WORKER> workers)
+        private List<String> getSurnames(List<WORKER> workers)
         {
+            List<String> result = new List<String>();
             foreach (var item in workers)
-                Console.WriteLine(item.surnameInitials.Split(" ")[0]);
+                result.Add(item.surnameInitials.Split(" ")[0]);
+
+            return result;
+        }
+
+        private void printStrings(List<String> strings)
+        {
+            foreach (var item in strings)
+                Console.WriteLine(item);
         }
 
         private List<WORKER> getWorkersExperienceMoreThan(List<WORKER> workers, int experience)
@@ -369,26 +386,26 @@
             string title = "";
 
             if (isEmptyResult)
-                title = $"Cотрудники со стажем {experience} лет не найдены!";
-            else
-                title = $"Фамилии работников ({array.Count} чел.), чей стаж работы в организации превышает {experience} лет: ";
-
-            if (!isSaveToFile)
             {
-                if (isEmptyResult)
-                    Console.ForegroundColor = ConsoleColor.Red;
-                else
-                    Console.ForegroundColor = ConsoleColor.Green;
-
-                Console.WriteLine(title);
-                printSurname(array);
+                title = $"Cотрудники со стажем {experience} лет не найдены!";
+                Console.ForegroundColor = ConsoleColor.Red;
             }
             else
             {
+                title = $"Фамилии работников ({array.Count} чел.), чей стаж работы в организации превышает {experience} лет: ";
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+
+            List<string> resultData = workersToString(array);
+            Console.WriteLine(title);
+            printStrings(resultData);
+
+            if (isSaveToFile)
+            {
+                resultData.Insert(0, title);
+
                 MyFiles myFiles = new MyFiles();
-                List<string> saveData = workersToString(array);
-                saveData.Insert(0, title);
-                myFiles.saveToFile(SAVE_DATA_TO_FILE, saveData);
+                myFiles.saveToFile(SAVE_DATA_TO_FILE, resultData);  
             }
         }
     }
@@ -660,21 +677,20 @@
             string title = "";
 
             if (isEmptyResult)
-                title = $"Люди со знаком зодиака \"{signZodiak}\" не найдены!";
-            else
-                title = $"Люди ({array.Count} чел.) со знаком зодиака {signZodiak}: ";
-
-            if (!isSaveToFile)
             {
-                if(isEmptyResult)
-                    Console.ForegroundColor = ConsoleColor.Red;
-                else
-                    Console.ForegroundColor = ConsoleColor.Green;
-
-                Console.WriteLine(title);
-                printMiniInfo(array);
+                title = $"Люди со знаком зодиака \"{signZodiak}\" не найдены!";
+                Console.ForegroundColor = ConsoleColor.Red;
             }
             else
+            {
+                title = $"Люди ({array.Count} чел.) со знаком зодиака {signZodiak}: ";
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+
+            Console.WriteLine(title);
+            printMiniInfo(array);
+
+            if (isSaveToFile)
             {
                 List<string> saveData = signToList(array);
                 saveData.Insert(0, title);
