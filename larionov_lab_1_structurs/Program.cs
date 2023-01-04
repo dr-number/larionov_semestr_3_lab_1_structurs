@@ -396,6 +396,7 @@
         int DEFAULT_COUNT_STRUCT = 8;
         int MAX_COUNT_STRUCT = 100;
         string READ_INIT_DATA_FROM_FILE = "zodiak_data.txt";
+        string SAVE_DATA_TO_FILE = "output_zodiak.txt";
 
         int MIN_MONTH = 1;
         int MAX_MONTH = 12;
@@ -560,11 +561,12 @@
             }
 
             List<ZNAK> result = new List<ZNAK>();
+            StreamReader file = null;
 
             try
             {
                 ZNAK people;
-                StreamReader file = new StreamReader(kFileName);
+                file = new StreamReader(kFileName);
 
                 while (!file.EndOfStream)
                 {
@@ -591,7 +593,15 @@
             catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Ошибка: {e.Message}");
+                Console.WriteLine($"Ошибка при чтении из файла: {e.Message}");
+            }
+            finally
+            {
+                try
+                {
+                    file.Close();
+                }
+                catch (Exception ignore) { }
             }
 
             return result;
@@ -627,17 +637,31 @@
             MyInput myInput = new MyInput();
             string signZodiak = myInput.inputText($"\nВведите знак зодиака\0: ");
 
-            array = getPeopleWithSign(array, signZodiak);
+            array = signSort(getPeopleWithSign(array, signZodiak));
             Console.ForegroundColor = ConsoleColor.Green;
 
-            if (array.Count == 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Люди со знаком зодиака \"{signZodiak}\" не найдены!");
-            }
+            bool isSaveToFile = myQuestion.isQuestion(myQuestion.WRITE_TO_FILE);
+            bool isEmptyResult = array.Count == 0;
+            string title = "";
 
-            Console.WriteLine($"Люди ({array.Count} чел.) со знаком зодиака {signZodiak}: ");
-            printMiniInfo(signSort(array));
+            if (isEmptyResult)
+                title = $"Люди со знаком зодиака \"{signZodiak}\" не найдены!";
+            else
+                title = $"Люди ({array.Count} чел.) со знаком зодиака {signZodiak}: ";
+
+            if (!isSaveToFile)
+            {
+                if(isEmptyResult)
+                    Console.ForegroundColor = ConsoleColor.Red;
+
+                Console.WriteLine(title);
+                printMiniInfo(array);
+            }
+            else
+            {
+                MyFiles myFiles = new MyFiles();
+                
+            }
         }
     }
 
