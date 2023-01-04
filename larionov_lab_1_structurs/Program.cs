@@ -153,7 +153,7 @@
 
     class MyFiles
     {
-        public bool saveToFile(string fileName, string[] data)
+        public bool saveToFile(string fileName, List<String> data)
         {
             StreamWriter file = null;
             bool result = false;
@@ -215,6 +215,16 @@
 
             foreach (var item in workers)
                 Console.WriteLine("{0,30}|   {1,30}|   {2,30}", item.surnameInitials, item.position, item.yearEmployment);
+        }
+
+        private List<String> workersToString(List<WORKER> workers)
+        {
+            List<String> result = new List<String>();
+
+            foreach (var item in workers)
+                result.Add($"{item.surnameInitials}, {item.position}, {item.yearEmployment}");
+
+            return result;
         }
 
         private void printSurname(List<WORKER> workers)
@@ -356,7 +366,7 @@
 
             bool isSaveToFile = myQuestion.isQuestion(myQuestion.WRITE_TO_FILE);
             bool isEmptyResult = array.Count == 0;
-            string title;
+            string title = "";
 
             if (isEmptyResult)
                 title = $"Cотрудники со стажем {experience} лет не найдены!";
@@ -371,7 +381,13 @@
                 Console.WriteLine(title);
                 printSurname(array);
             }
-            
+            else
+            {
+                MyFiles myFiles = new MyFiles();
+                List<string> saveData = workersToString(array);
+                saveData.Insert(0, title);
+                myFiles.saveToFile(SAVE_DATA_TO_FILE, saveData);
+            }
         }
     }
 
