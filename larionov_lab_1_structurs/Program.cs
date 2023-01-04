@@ -202,8 +202,8 @@
         private string inputSurnameInitials()
         {
             MyInput myInput = new MyInput();
-            string surname = myInput.inputText("Введите фамилию: ");
-            string initials = myInput.inputText("Введите инициалы: ");
+            string surname = myInput.inputText("\nВведите фамилию: ");
+            string initials = myInput.inputText("\nВведите инициалы: ");
             return surname + " " + initials;
         }
 
@@ -216,8 +216,8 @@
             Console.WriteLine($"\nВведите данные сотрудника {current} из {max}: ");
 
             worker.surnameInitials = inputSurnameInitials();
-            worker.position = myInput.inputText("Введите название занимаемой должности: ");
-            worker.yearEmployment = myInput.inputInt("Введите год поступления на работу: ");
+            worker.position = myInput.inputText("\nВведите название занимаемой должности: ");
+            worker.yearEmployment = myInput.inputInt("\nВведите год поступления на работу: ");
 
             return worker;
         }
@@ -397,17 +397,17 @@
         private string inputSurnameName()
         {
             MyInput myInput = new MyInput();
-            string surname = myInput.inputText("Введите фамилию: ");
-            string name = myInput.inputText("Введите имя: ");
+            string surname = myInput.inputText("\nВведите фамилию: ");
+            string name = myInput.inputText("\nВведите имя: ");
             return surname + " " + name;
         }
 
         private int[] inputBirthday()
         {
             MyInput myInput = new MyInput();
-            int day = myInput.inputInterval("Введите день: ", MIN_DAY, MAX_DAY);
-            int month = myInput.inputInterval("Введите месяц: ", MIN_MONTH, MAX_MONTH);
-            int year = myInput.inputInterval("Введите месяц: ", MIN_YEAR, MAX_YEAR);
+            int day = myInput.inputInterval("\nВведите день: ", MIN_DAY, MAX_DAY);
+            int month = myInput.inputInterval("\nВведите месяц: ", MIN_MONTH, MAX_MONTH);
+            int year = myInput.inputInterval("\nВведите год: ", MIN_YEAR, MAX_YEAR);
             return new int[] { day, month, year };
         }
 
@@ -456,7 +456,7 @@
         {
             ZNAK znak = new ZNAK();
             Console.ResetColor();
-            Console.WriteLine($"\nВведите данные сотрудника {current} из {max}: ");
+            Console.WriteLine($"\nВведите данные человека {current} из {max}: ");
 
             int[] birthday = inputBirthday();
             znak.surnameName = inputSurnameName();
