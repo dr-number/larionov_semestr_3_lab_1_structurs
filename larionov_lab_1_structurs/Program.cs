@@ -126,7 +126,7 @@
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"{xStr} - не число\n");
                 }
-                else if (x <= minValue || x > maxValue)
+                else if (x < minValue || x > maxValue)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Введите число в промежутке от {minValue} до {maxValue} включительно!\n");
@@ -458,8 +458,8 @@
             Console.ResetColor();
             Console.WriteLine($"\nВведите данные человека {current} из {max}: ");
 
-            int[] birthday = inputBirthday();
             znak.surnameName = inputSurnameName();
+            int[] birthday = inputBirthday();
             znak.birthday = birthday;
             znak.zodiacSign = getZodiacSign(birthday[0], birthday[1]);
 
