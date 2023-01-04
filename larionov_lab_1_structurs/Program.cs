@@ -142,6 +142,7 @@
     class MyQuestion
     {
         public string INPUT_FROM_KEYBOARD = "Хотите ввести исходные данные с клавиатуры? [y/n]: ";
+        public string WRITE_TO_FILE = "Записать результирующие данные в файл?  [y/n]: ";
 
         public bool isQuestion(string textQuestion)
         {
@@ -150,11 +151,46 @@
         }
     }
 
+    class MyFiles
+    {
+        public bool saveToFile(string fileName, string[] data)
+        {
+            StreamWriter file = null;
+            bool result = false;
+            try
+            {
+                file = new StreamWriter(fileName);
+                foreach (var item in data)
+                    file.WriteLine(item);
+
+                file.Close();
+                result = true;
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Ошибка при записи в файл: {e.Message}");
+                result = false;
+            }
+            finally
+            {
+                try
+                {
+                    file.Close();
+                }
+                catch (Exception ignore) {}
+            }
+
+            return result;
+        }
+    }
+
     class Task1
     {
         int DEFAULT_COUNT_STRUCT = 10;
         int MAX_COUNT_STRUCT = 100;
         string READ_INIT_DATA_FROM_FILE = "workers_data.txt";
+        string SAVE_DATA_TO_FILE = "output_workers.txt";
 
         int EXPERIENCE_DEFAULT = 15;
         int EXPERIENCE_MAX = 50;
@@ -244,12 +280,13 @@
                 return null;
             }
 
+            StreamReader file = null;
             List<WORKER> result = new List<WORKER>();
 
             try
             {
                 WORKER worker;
-                StreamReader file = new StreamReader(kFileName);
+                file = new StreamReader(kFileName);
 
                 while (!file.EndOfStream)
                 {
@@ -270,7 +307,15 @@
             catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Ошибка: {e.Message}");
+                Console.WriteLine($"Ошибка при чтении из файла: {e.Message}");
+            }
+            finally
+            {
+                try
+                {
+                    file.Close();
+                }
+                catch (Exception ignore) { }
             }
 
             return result;
@@ -306,17 +351,27 @@
             MyInput myInput = new MyInput();
             int experience = myInput.inputCount($"\nСколько лет стажа? (Для {EXPERIENCE_DEFAULT} нажмите ENTER)\0: ", EXPERIENCE_MAX, EXPERIENCE_DEFAULT);
 
-            array = getWorkersExperienceMoreThan(array, experience);
+            array = workerSort(getWorkersExperienceMoreThan(array, experience));
             Console.ForegroundColor = ConsoleColor.Green;
 
-            if (array.Count == 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Такие сотрудники не найдены!");
-            }
+            bool isSaveToFile = myQuestion.isQuestion(myQuestion.WRITE_TO_FILE);
+            bool isEmptyResult = array.Count == 0;
+            string title;
 
-            Console.WriteLine($"Фамилии работников ({array.Count} чел.), чей стаж работы в организации превышает {experience} лет: ");
-            printSurname(workerSort(array));
+            if (isEmptyResult)
+                title = $"Cотрудники со стажем {experience} лет не найдены!";
+            else
+                title = $"Фамилии работников ({array.Count} чел.), чей стаж работы в организации превышает {experience} лет: ";
+
+            if (!isSaveToFile)
+            {
+                if (isEmptyResult)
+                    Console.ForegroundColor = ConsoleColor.Red;
+                   
+                Console.WriteLine(title);
+                printSurname(array);
+            }
+            
         }
     }
 
