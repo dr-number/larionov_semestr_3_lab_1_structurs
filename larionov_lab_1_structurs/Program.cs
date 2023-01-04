@@ -454,6 +454,19 @@
             }
         }
 
+        private List<string> signToList(List<ZNAK> signs)
+        {
+            List<string> result = new List<string>();
+            foreach (var item in signs)
+            {
+                result.Add(
+                    $"{item.surnameName}, {new DateTime(item.birthday[2], item.birthday[1], item.birthday[0]).ToString(FORMAT_DATE_PRINT)}" 
+                );
+            }
+
+            return result;
+        }
+
         private List<ZNAK> getPeopleWithSign(List<ZNAK> peoples, string sign)
         {
             List<ZNAK> array = new List<ZNAK>();
@@ -659,8 +672,11 @@
             }
             else
             {
+                List<string> saveData = signToList(array);
+                saveData.Insert(0, title);
+
                 MyFiles myFiles = new MyFiles();
-                
+                myFiles.saveToFile(SAVE_DATA_TO_FILE, saveData);
             }
         }
     }
